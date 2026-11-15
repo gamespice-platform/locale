@@ -10,9 +10,9 @@ Part of TMC's **Dot** collection: modular, MIT-licensed building blocks for game
 
 ## Install
 
-You need [Godot 4.7](https://godotengine.org/download). [dot-bootstrap](https://github.com/modcommunity/dot-bootstrap) clones every project and links the addons for you.
+You need [Godot 4.7](https://godotengine.org/download). [dot-bootstrap](https://github.com/gamespice-platform/bootstrap) clones every project and links the addons for you.
 
-By hand: copy `addons/dot_locale/` and [dot-core](https://github.com/modcommunity/dot-core)'s `addons/dot_core/` into your project and enable dot-locale in **Project > Project Settings > Plugins**. dot-core is the only dependency.
+By hand: copy `addons/dot_locale/` and [dot-core](https://github.com/gamespice-platform/core)'s `addons/dot_core/` into your project and enable dot-locale in **Project > Project Settings > Plugins**. dot-core is the only dependency.
 
 ## Files
 
