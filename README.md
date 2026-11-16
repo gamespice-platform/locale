@@ -68,7 +68,7 @@ Pseudo-localisation shows `Sam joined.` as `[Sam ĵóíñéð. ~·~]`. Text stil
 
 ## Settings
 
-`DotLocaleConfig` is layered like every Gamespice config: inspector defaults, a JSON file, the environment, then the command line. Call `load_layered()` before `make()`. Environment names look like `DOT_LOCALE_LANGUAGE`, flags like `--locale-language`.
+`DotLocaleConfig` is layered like every Gamespice config: inspector defaults, a JSON file, the environment, then the command line. Call `load_layered()` before `make()`. Environment names look like `GS_LOCALE_LANGUAGE`, flags like `--locale-language`.
 
 | Setting | Default | What it does |
 | --- | --- | --- |
