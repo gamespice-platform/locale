@@ -1,4 +1,4 @@
-# dot-locale history
+# GameSpice Locale history
 
 What building it found. The rules these left are in [CLAUDE.md](../CLAUDE.md) and [design.md](design.md).
 

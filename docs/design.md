@@ -1,4 +1,4 @@
-# dot-locale design
+# GameSpice Locale design
 
 Why the addon exists and the decisions behind it. The one-line rules are in [CLAUDE.md](../CLAUDE.md).
 
@@ -38,7 +38,7 @@ A server rendering messages for players in four languages needs four translators
 
 ## The site's locale files are not copied into this repository
 
-They are the site's content, in a private repository, and change on the site's schedule. A game ships the ones it uses, or fetches them: dot-cloud can deliver a locale pack like any other content.
+They are the site's content, in a private repository, and change on the site's schedule. A game ships the ones it uses, or fetches them: GameSpice Cloud can deliver a locale pack like any other content.
 
 ## Things deliberately not here
 

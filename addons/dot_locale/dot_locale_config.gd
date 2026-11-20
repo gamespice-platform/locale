@@ -6,7 +6,7 @@ extends DotConfig
 ##
 ## Layered like every config here, so a tester can run a build in German with
 ## `--locale-language de` or pseudo-localised with `--locale-pseudo true` without a
-## settings screen, and a player's choice from dot-settings is one more layer on top.
+## settings screen, and a player's choice from GameSpice Settings is one more layer on top.
 
 ## The player's language, as a tag ("de", "pt-BR"). Empty asks the operating system.
 @export var language: String = ""

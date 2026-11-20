@@ -1,10 +1,10 @@
-# dot-locale
+# GameSpice Locale
 
 Localisation that reads website-city's own locale files: ICU MessageFormat, CLDR plural rules, a fallback chain that ends in the key, and pseudo-localisation. It turns the reason keys the site and dot-party return into sentences in the player's language.
 
 Read the family [CLAUDE.md](../../CLAUDE.md) first.
 
-**The distributable is `addons/dot_locale/`.** It requires [dot-core](../dot-core) and nothing else (`ln -s ../../dot-core/addons/dot_core addons/dot_core`, gitignored).
+**The distributable is `addons/dot_locale/`.** It requires [GameSpice Core](../dot-core) and nothing else (`ln -s ../../dot-core/addons/dot_core addons/dot_core`, gitignored).
 
 ## Read before
 

@@ -21,7 +21,7 @@ extends RefCounted
 ## rules; Russian ones would pick "few" and find no such branch.
 ##
 ## [b]A refusal is a key.[/b] website-city refuses with keys — [code]party.join.deny.full[/code]
-## — and dot-party carries them in [member DotError.detail]. [method explain] renders one
+## — and GameSpice Party carries them in [member DotError.detail]. [method explain] renders one
 ## if the catalogue has it and falls back to the error's own English message if not, so a
 ## game gets the site's translation for free where it has the site's files and loses
 ## nothing where it does not.
