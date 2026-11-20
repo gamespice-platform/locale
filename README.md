@@ -1,4 +1,4 @@
-[![dot-locale - GameSpice addon](docs/banner.png)](https://moddingcommunity.com/a/259-dot-locale)
+[![Locale - GameSpice addon](docs/banner.png)](https://moddingcommunity.com/a/259-dot-locale)
 
 Translates a game's text into the player's language. It reads the same files, message format and keys as the TMC website, so when the website refuses something (a full party, say), the game can show the website's own message in any language the website has, with nothing to keep in sync.
 
