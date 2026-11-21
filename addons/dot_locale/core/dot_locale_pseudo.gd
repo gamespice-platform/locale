@@ -1,4 +1,4 @@
-class_name DotLocalePseudo
+class_name GSLocalePseudo
 extends RefCounted
 
 ## Pseudo-localisation: every message made longer, accented and bracketed, placeholders intact.

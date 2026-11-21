@@ -1,4 +1,4 @@
-class_name DotLocaleCatalogue
+class_name GSLocaleCatalogue
 extends RefCounted
 
 ## Every message for every language, keyed the way the website keys them.
@@ -12,7 +12,7 @@ extends RefCounted
 ## is [code]ns[/code] because [code]namespace[/code] is a reserved word).
 ##
 ## A key that exists in one language and not another is normal — translations lag — and
-## is what the fallback chain in [DotLocale] is for. [method missing_in] lists them, so a
+## is what the fallback chain in [GSLocale] is for. [method missing_in] lists them, so a
 ## translator can be handed the gap rather than asked to find it.
 
 ## locale -> {key -> pattern}
@@ -20,7 +20,7 @@ var _messages: Dictionary = {}
 
 
 func add(locale: String, ns: String, tree: Dictionary) -> int:
-	var tag := DotLocaleCatalogue.normalise(locale)
+	var tag := GSLocaleCatalogue.normalise(locale)
 	if not _messages.has(tag):
 		_messages[tag] = {}
 	var into: Dictionary = _messages[tag]
@@ -30,7 +30,7 @@ func add(locale: String, ns: String, tree: Dictionary) -> int:
 
 
 func add_message(locale: String, key: String, pattern: String) -> void:
-	var tag := DotLocaleCatalogue.normalise(locale)
+	var tag := GSLocaleCatalogue.normalise(locale)
 	if not _messages.has(tag):
 		_messages[tag] = {}
 	(_messages[tag] as Dictionary)[key] = pattern
@@ -41,10 +41,10 @@ func add_message(locale: String, key: String, pattern: String) -> void:
 ##
 ## One bad file refuses the load of that file only, and says which — a translator's
 ## trailing comma in Russian must not take the English away.
-func load_dir(dir: String) -> DotResult:
+func load_dir(dir: String) -> GSResult:
 	var root := DirAccess.open(dir)
 	if root == null:
-		return DotResult.fail(DotError.CODE_IO, "There is no locale directory there.", dir)
+		return GSResult.fail(GSError.CODE_IO, "There is no locale directory there.", dir)
 	var count := 0
 	var problems := PackedStringArray()
 	for locale in root.get_directories():
@@ -67,19 +67,19 @@ func load_dir(dir: String) -> DotResult:
 				continue
 			count += add(locale, file.get_basename(), json.data as Dictionary)
 	if not problems.is_empty():
-		var res := DotResult.fail(DotError.CODE_PARSE, "Some locale files could not be read.", ", ".join(problems))
+		var res := GSResult.fail(GSError.CODE_PARSE, "Some locale files could not be read.", ", ".join(problems))
 		res.error.context["loaded"] = count
 		return res
-	return DotResult.success(count)
+	return GSResult.success(count)
 
 
 func pattern(locale: String, key: String) -> Variant:
-	var table: Dictionary = _messages.get(DotLocaleCatalogue.normalise(locale), {})
+	var table: Dictionary = _messages.get(GSLocaleCatalogue.normalise(locale), {})
 	return table.get(key)
 
 
 func has_key(locale: String, key: String) -> bool:
-	return (_messages.get(DotLocaleCatalogue.normalise(locale), {}) as Dictionary).has(key)
+	return (_messages.get(GSLocaleCatalogue.normalise(locale), {}) as Dictionary).has(key)
 
 
 func locales() -> PackedStringArray:
@@ -92,7 +92,7 @@ func locales() -> PackedStringArray:
 
 func keys(locale: String) -> PackedStringArray:
 	var out := PackedStringArray()
-	for k in (_messages.get(DotLocaleCatalogue.normalise(locale), {}) as Dictionary):
+	for k in (_messages.get(GSLocaleCatalogue.normalise(locale), {}) as Dictionary):
 		out.append(str(k))
 	out.sort()
 	return out
@@ -100,7 +100,7 @@ func keys(locale: String) -> PackedStringArray:
 
 func count(locale: String = "") -> int:
 	if locale != "":
-		return (_messages.get(DotLocaleCatalogue.normalise(locale), {}) as Dictionary).size()
+		return (_messages.get(GSLocaleCatalogue.normalise(locale), {}) as Dictionary).size()
 	var n := 0
 	for t in _messages.values():
 		n += (t as Dictionary).size()
@@ -109,7 +109,7 @@ func count(locale: String = "") -> int:
 
 ## Keys [param reference] has and [param locale] does not: a translator's to-do list.
 func missing_in(locale: String, reference: String = "en") -> PackedStringArray:
-	var have: Dictionary = _messages.get(DotLocaleCatalogue.normalise(locale), {})
+	var have: Dictionary = _messages.get(GSLocaleCatalogue.normalise(locale), {})
 	var out := PackedStringArray()
 	for k in keys(reference):
 		if not have.has(k):
@@ -122,13 +122,13 @@ func missing_in(locale: String, reference: String = "en") -> PackedStringArray:
 ## the braces to every German player, and nothing fails.
 func argument_mismatches(locale: String, reference: String = "en") -> PackedStringArray:
 	var out := PackedStringArray()
-	var ref: Dictionary = _messages.get(DotLocaleCatalogue.normalise(reference), {})
-	var other: Dictionary = _messages.get(DotLocaleCatalogue.normalise(locale), {})
+	var ref: Dictionary = _messages.get(GSLocaleCatalogue.normalise(reference), {})
+	var other: Dictionary = _messages.get(GSLocaleCatalogue.normalise(locale), {})
 	for k in other:
 		if not ref.has(k):
 			continue
-		var want := DotLocaleFormat.arguments(str(ref[k]))
-		var got := DotLocaleFormat.arguments(str(other[k]))
+		var want := GSLocaleFormat.arguments(str(ref[k]))
+		var got := GSLocaleFormat.arguments(str(other[k]))
 		want.sort()
 		got.sort()
 		if want != got:

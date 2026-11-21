@@ -1,4 +1,4 @@
-class_name DotLocalePlural
+class_name GSLocalePlural
 extends RefCounted
 
 ## Which plural form a number takes, per language, from the CLDR rules.

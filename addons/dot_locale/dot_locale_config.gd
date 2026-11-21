@@ -1,6 +1,6 @@
 @tool
-class_name DotLocaleConfig
-extends DotConfig
+class_name GSLocaleConfig
+extends GSConfig
 
 ## Which language, where the messages are, and whether to pseudo-localise.
 ##
@@ -30,27 +30,27 @@ func cli_prefix() -> String:
 	return "--locale-"
 
 
-func validate() -> DotResult:
-	if DotLocaleCatalogue.normalise(default_language) == "":
-		return DotResult.fail(DotError.CODE_INVALID, "a default language is required: it is where every fallback ends")
-	return DotResult.success(null)
+func validate() -> GSResult:
+	if GSLocaleCatalogue.normalise(default_language) == "":
+		return GSResult.fail(GSError.CODE_INVALID, "a default language is required: it is where every fallback ends")
+	return GSResult.success(null)
 
 
-## Builds a [DotLocale] from this configuration, reading [member directory] if it exists.
+## Builds a [GSLocale] from this configuration, reading [member directory] if it exists.
 ## A missing directory is not an error: a game with no translations yet still gets keys
 ## back, and a key on screen is how the first missing string is found.
-func make() -> DotResult:
+func make() -> GSResult:
 	var valid := validate()
 	if not valid.ok:
 		return valid
-	var cat := DotLocaleCatalogue.new()
+	var cat := GSLocaleCatalogue.new()
 	if DirAccess.dir_exists_absolute(directory):
 		var loaded := cat.load_dir(directory)
 		if not loaded.ok:
-			DotLog.warn("locale", "some locale files did not load", {"detail": loaded.error.detail})
-	var loc := DotLocale.new(cat, language, default_language)
+			GSLog.warn("locale", "some locale files did not load", {"detail": loaded.error.detail})
+	var loc := GSLocale.new(cat, language, default_language)
 	loc.pseudo = pseudo
-	return DotResult.success(loc)
+	return GSResult.success(loc)
 
 
 func describe_lines(_redact_sensitive: bool = true) -> PackedStringArray:

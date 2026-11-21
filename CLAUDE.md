@@ -17,12 +17,12 @@ Read the family [CLAUDE.md](../../CLAUDE.md) first.
 
 | Path | What |
 | --- | --- |
-| `core/dot_locale_plural.gd` | `DotLocalePlural`: CLDR cardinal rules with CLDR's operands; unknown language → `other` |
-| `core/dot_locale_format.gd` | `DotLocaleFormat`: the ICU subset, compiled to a tree once |
-| `core/dot_locale_catalogue.gd` | `DotLocaleCatalogue`: locale → key → pattern; `load_dir`, `add(locale, ns, tree)`, `missing_in`, `argument_mismatches` |
-| `core/dot_locale_pseudo.gd` | `DotLocalePseudo`: accent, bracket, expand, keep the ICU structure |
-| `runtime/dot_locale.gd` | `DotLocale`: the translator; `t`, `explain(DotError)`, `chain`, `missing_keys`, `to_translation`, `register` |
-| `dot_locale_config.gd` | `DotLocaleConfig`: `language`, `default_language`, `directory`, `pseudo`, layered (`--locale-language de`, `--locale-pseudo true`) |
+| `core/dot_locale_plural.gd` | `GSLocalePlural`: CLDR cardinal rules with CLDR's operands; unknown language → `other` |
+| `core/dot_locale_format.gd` | `GSLocaleFormat`: the ICU subset, compiled to a tree once |
+| `core/dot_locale_catalogue.gd` | `GSLocaleCatalogue`: locale → key → pattern; `load_dir`, `add(locale, ns, tree)`, `missing_in`, `argument_mismatches` |
+| `core/dot_locale_pseudo.gd` | `GSLocalePseudo`: accent, bracket, expand, keep the ICU structure |
+| `runtime/dot_locale.gd` | `GSLocale`: the translator; `t`, `explain(GSError)`, `chain`, `missing_keys`, `to_translation`, `register` |
+| `dot_locale_config.gd` | `GSLocaleConfig`: `language`, `default_language`, `directory`, `pseudo`, layered (`--locale-language de`, `--locale-pseudo true`) |
 | `examples/locale_selftest.tscn` | the suite; writes nothing outside `user://` |
 
 Paths except `examples/` are in `addons/dot_locale/`.
@@ -38,7 +38,7 @@ The family's two steps ([family CLAUDE.md](../../CLAUDE.md#validating-anything))
 - A pattern that does not parse is shown raw. [design](docs/design.md#a-pattern-that-does-not-parse-is-shown-raw)
 - Load JSON with a `JSON` instance, never `JSON.parse_string`; one bad file refuses only itself. [design](docs/design.md#a-catalogue-load-does-not-print-engine-errors)
 - Only argument-free messages go into an engine `Translation`. [design](docs/design.md#only-argument-free-messages-become-an-engine-translation)
-- One `DotLocale` per language in use, found through `DotRegistry`; no autoload, no Node. [design](docs/design.md#not-an-autoload-and-not-a-node)
+- One `GSLocale` per language in use, found through `GSRegistry`; no autoload, no Node. [design](docs/design.md#not-an-autoload-and-not-a-node)
 - `namespace` is reserved in GDScript; the parameter is `ns`. [history](docs/history.md#namespace-is-a-reserved-word)
 - The site's locale files are never copied into this repository. [design](docs/design.md#the-sites-locale-files-are-not-copied-into-this-repository)
 

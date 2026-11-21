@@ -1,4 +1,4 @@
-class_name DotLocaleFormat
+class_name GSLocaleFormat
 extends RefCounted
 
 ## ICU MessageFormat, the subset website-city's locale files actually use.
@@ -10,7 +10,7 @@ extends RefCounted
 ## website renders the same in a game.
 ##
 ## [b]Parsed into a tree once, formatted many times.[/b] A HUD line reformatted every frame
-## must not re-parse its pattern every frame; [DotLocale] caches the tree per pattern.
+## must not re-parse its pattern every frame; [GSLocale] caches the tree per pattern.
 ##
 ## [b]A pattern that does not parse is shown, not hidden.[/b] [method format] falls back
 ## to the raw pattern, braces and all. An empty string where a sentence should be is a
@@ -26,12 +26,12 @@ const HASH := 5
 
 
 ## Parses [param pattern]. Value: an Array of nodes.
-static func compile(pattern: String) -> DotResult:
+static func compile(pattern: String) -> GSResult:
 	var st := {"s": pattern, "i": 0}
 	var nodes := _parse_nodes(st, false, false)
 	if st.has("error"):
-		return DotResult.fail(DotError.CODE_PARSE, str(st["error"]), pattern)
-	return DotResult.success(nodes)
+		return GSResult.fail(GSError.CODE_PARSE, str(st["error"]), pattern)
+	return GSResult.success(nodes)
 
 
 ## Formats [param pattern] with [param args] for [param locale]; the raw pattern if it
@@ -64,7 +64,7 @@ static func render(nodes: Array, args: Dictionary, locale: String, hash_value: V
 				var branches: Dictionary = n[2]
 				var exact := "=%d" % int(num)
 				var key := exact if branches.has(exact) and is_equal_approx(num, floorf(num)) \
-					else DotLocalePlural.category(locale, num)
+					else GSLocalePlural.category(locale, num)
 				if not branches.has(key):
 					key = "other"
 				out += render(branches.get(key, []), args, locale, value)
@@ -232,7 +232,7 @@ static func _skip_space(st: Dictionary) -> void:
 static func _number(v: Variant, locale: String) -> String:
 	if not (v is int or v is float):
 		return str(v) if v != null else ""
-	var lang := DotLocalePlural.language_of(locale)
+	var lang := GSLocalePlural.language_of(locale)
 	var group := ","
 	var point := "."
 	match lang:

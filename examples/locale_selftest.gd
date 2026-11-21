@@ -21,7 +21,7 @@ var _section_count := 0
 
 
 func _ready() -> void:
-	DotLog.set_level(DotLog.Level.ERROR)
+	GSLog.set_level(GSLog.Level.ERROR)
 	_run()
 
 
@@ -61,22 +61,22 @@ func _run() -> void:
 func _test_plurals() -> void:
 	_section("Plural categories are CLDR's, per language")
 
-	_check(DotLocalePlural.category("en", 1) == "one" and DotLocalePlural.category("en", 0) == "other", "English: 1 is one, 0 is other")
-	_check(DotLocalePlural.category("en", 1.0, 1) == "other", "and '1.0' is other, because a visible decimal changes the form")
-	_check(DotLocalePlural.category("fr", 0) == "one", "French puts 0 with 1")
-	_check(DotLocalePlural.category("pt-BR", 0) == "one" and DotLocalePlural.category("pt-PT", 0) == "other", "Brazilian Portuguese does too, and European does not")
+	_check(GSLocalePlural.category("en", 1) == "one" and GSLocalePlural.category("en", 0) == "other", "English: 1 is one, 0 is other")
+	_check(GSLocalePlural.category("en", 1.0, 1) == "other", "and '1.0' is other, because a visible decimal changes the form")
+	_check(GSLocalePlural.category("fr", 0) == "one", "French puts 0 with 1")
+	_check(GSLocalePlural.category("pt-BR", 0) == "one" and GSLocalePlural.category("pt-PT", 0) == "other", "Brazilian Portuguese does too, and European does not")
 
 	var ru := [[1, "one"], [21, "one"], [11, "many"], [2, "few"], [22, "few"], [12, "many"], [5, "many"], [111, "many"], [101, "one"]]
 	var wrong := PackedStringArray()
 	for pair in ru:
-		var got := DotLocalePlural.category("ru", float(pair[0]))
+		var got := GSLocalePlural.category("ru", float(pair[0]))
 		if got != str(pair[1]):
 			wrong.append("%d→%s" % [pair[0], got])
 	_check(wrong.is_empty(), "Russian: 1 21 101 one, 2 22 few, 5 11 12 111 many %s" % str(wrong))
-	_check(DotLocalePlural.category("ru", 1.5) == "other", "and a fraction is other")
-	_check(DotLocalePlural.category("pl", 22) == "few" and DotLocalePlural.category("pl", 21) == "many" and DotLocalePlural.category("pl", 1) == "one", "Polish: 22 few but 21 many, unlike Russian")
-	_check(DotLocalePlural.category("ja", 1) == "other" and DotLocalePlural.category("zh-Hans", 1) == "other", "Japanese and Chinese have one form")
-	_check(DotLocalePlural.category("xx", 1) == "other", "an unknown language answers other, which every ICU plural must have")
+	_check(GSLocalePlural.category("ru", 1.5) == "other", "and a fraction is other")
+	_check(GSLocalePlural.category("pl", 22) == "few" and GSLocalePlural.category("pl", 21) == "many" and GSLocalePlural.category("pl", 1) == "one", "Polish: 22 few but 21 many, unlike Russian")
+	_check(GSLocalePlural.category("ja", 1) == "other" and GSLocalePlural.category("zh-Hans", 1) == "other", "Japanese and Chinese have one form")
+	_check(GSLocalePlural.category("xx", 1) == "other", "an unknown language answers other, which every ICU plural must have")
 
 
 # --- 2 ----------------------------------------------------------------------
@@ -84,30 +84,30 @@ func _test_plurals() -> void:
 func _test_format() -> void:
 	_section("ICU MessageFormat, as the site writes it")
 
-	_check(DotLocaleFormat.format("{user} joined.", {"user": "Sam"}) == "Sam joined.", "an argument")
-	_check(DotLocaleFormat.format("{user} joined.", {}) == "{user} joined.", "a missing argument is shown by name, not as nothing")
-	_check(DotLocaleFormat.format("{n, number} rounds", {"n": 12500}, "en") == "12,500 rounds", "numbers are grouped for English")
-	_check(DotLocaleFormat.format("{n, number}", {"n": 12500}, "de") == "12.500", "and for German, the other way round")
-	_check(DotLocaleFormat.format("{n, number}", {"n": 1234.5}, "fr") == "1 234,5", "and for French, with a comma for the point")
+	_check(GSLocaleFormat.format("{user} joined.", {"user": "Sam"}) == "Sam joined.", "an argument")
+	_check(GSLocaleFormat.format("{user} joined.", {}) == "{user} joined.", "a missing argument is shown by name, not as nothing")
+	_check(GSLocaleFormat.format("{n, number} rounds", {"n": 12500}, "en") == "12,500 rounds", "numbers are grouped for English")
+	_check(GSLocaleFormat.format("{n, number}", {"n": 12500}, "de") == "12.500", "and for German, the other way round")
+	_check(GSLocaleFormat.format("{n, number}", {"n": 1234.5}, "fr") == "1 234,5", "and for French, with a comma for the point")
 
 	var rounds := "{count, plural, =0 {no rounds} one {# round} other {# rounds}}"
-	_check(DotLocaleFormat.format(rounds, {"count": 0}) == "no rounds", "an exact =0 branch wins over the category")
-	_check(DotLocaleFormat.format(rounds, {"count": 1}) == "1 round", "# is the number")
-	_check(DotLocaleFormat.format(rounds, {"count": 1500}) == "1,500 rounds", "and is formatted like one")
+	_check(GSLocaleFormat.format(rounds, {"count": 0}) == "no rounds", "an exact =0 branch wins over the category")
+	_check(GSLocaleFormat.format(rounds, {"count": 1}) == "1 round", "# is the number")
+	_check(GSLocaleFormat.format(rounds, {"count": 1500}) == "1,500 rounds", "and is formatted like one")
 
 	var ru := "{count, plural, one {# раунд} few {# раунда} many {# раундов} other {# раунда}}"
-	_check(DotLocaleFormat.format(ru, {"count": 21}, "ru") == "21 раунд" and DotLocaleFormat.format(ru, {"count": 24}, "ru") == "24 раунда", "a Russian plural picks by the last digit")
+	_check(GSLocaleFormat.format(ru, {"count": 21}, "ru") == "21 раунд" and GSLocaleFormat.format(ru, {"count": 24}, "ru") == "24 раунда", "a Russian plural picks by the last digit")
 
 	var who := "{role, select, host {You host} other {{name} hosts}} {count, plural, one {# game} other {# games}}"
-	_check(DotLocaleFormat.format(who, {"role": "member", "name": "Ada", "count": 3}) == "Ada hosts 3 games", "select, nesting, and two arguments of different kinds")
-	_check(DotLocaleFormat.format("It''s '{'literal'}'", {}) == "It's {literal}", "ICU quoting: '' is a quote, '{' is a brace")
-	_check(DotLocaleFormat.format("don't", {}) == "don't", "and a lone apostrophe is just one")
+	_check(GSLocaleFormat.format(who, {"role": "member", "name": "Ada", "count": 3}) == "Ada hosts 3 games", "select, nesting, and two arguments of different kinds")
+	_check(GSLocaleFormat.format("It''s '{'literal'}'", {}) == "It's {literal}", "ICU quoting: '' is a quote, '{' is a brace")
+	_check(GSLocaleFormat.format("don't", {}) == "don't", "and a lone apostrophe is just one")
 
-	_check(not DotLocaleFormat.compile("{count, plural, one {x}}").ok, "a plural without 'other' is refused, as ICU requires")
-	_check(DotLocaleFormat.format("{count, plural, one {x}}", {"count": 1}) == "{count, plural, one {x}}", "and shown raw rather than as nothing")
-	_check(not DotLocaleFormat.compile("{a, frobnicate}").ok, "an unknown argument type is refused")
-	_check(not DotLocaleFormat.compile("oops }").ok, "as is an unmatched brace")
-	var args := DotLocaleFormat.arguments(who)
+	_check(not GSLocaleFormat.compile("{count, plural, one {x}}").ok, "a plural without 'other' is refused, as ICU requires")
+	_check(GSLocaleFormat.format("{count, plural, one {x}}", {"count": 1}) == "{count, plural, one {x}}", "and shown raw rather than as nothing")
+	_check(not GSLocaleFormat.compile("{a, frobnicate}").ok, "an unknown argument type is refused")
+	_check(not GSLocaleFormat.compile("oops }").ok, "as is an unmatched brace")
+	var args := GSLocaleFormat.arguments(who)
 	args.sort()
 	_check(args == PackedStringArray(["count", "name", "role"]), "every argument a pattern uses can be listed")
 
@@ -123,7 +123,7 @@ func _test_catalogue() -> void:
 	_write_text(root + "/ru/party.json", "{ \"join\": { \"deny\": { \"full\": \"Эта группа заполнена.\", } }")
 	_write(root + "/ru/chat.json", {"sent": "Отправлено"})
 
-	var cat := DotLocaleCatalogue.new()
+	var cat := GSLocaleCatalogue.new()
 	var loaded := cat.load_dir(root)
 	_check(not loaded.ok and loaded.error.detail.contains("ru/party.json"), "a broken file is named")
 	_check(int(loaded.error.context.get("loaded", 0)) == 6, "and refuses only itself: the other files loaded (6 messages)")
@@ -131,7 +131,7 @@ func _test_catalogue() -> void:
 	_check(cat.pattern("ru", "chat.sent") == "Отправлено", "Russian's other file still loaded")
 	_check(cat.missing_in("de") == PackedStringArray(["party.join.deny.banned"]), "a translator's to-do list is the reference's keys the language lacks")
 	_check(cat.argument_mismatches("de") == PackedStringArray(["party.ready.count"]), "a translation whose arguments disagree with the reference is found")
-	_check(DotLocaleCatalogue.normalise("pt_br") == "pt-BR" and DotLocaleCatalogue.normalise("ZH-hans-cn") == "zh-Hans-CN", "tags are normalised")
+	_check(GSLocaleCatalogue.normalise("pt_br") == "pt-BR" and GSLocaleCatalogue.normalise("ZH-hans-cn") == "zh-Hans-CN", "tags are normalised")
 	_remove_tree(ProjectSettings.globalize_path(root))
 
 
@@ -140,11 +140,11 @@ func _test_catalogue() -> void:
 func _test_chain() -> void:
 	_section("The fallback chain ends in a searchable key, never in nothing")
 
-	_check(DotLocale.chain_for("pt-BR", "en") == PackedStringArray(["pt-BR", "pt", "en"]), "pt-BR falls back to pt and then English")
-	_check(DotLocale.chain_for("en-GB", "en") == PackedStringArray(["en-GB", "en"]), "without repeating the default")
+	_check(GSLocale.chain_for("pt-BR", "en") == PackedStringArray(["pt-BR", "pt", "en"]), "pt-BR falls back to pt and then English")
+	_check(GSLocale.chain_for("en-GB", "en") == PackedStringArray(["en-GB", "en"]), "without repeating the default")
 
 	var cat := _catalogue()
-	var loc := DotLocale.new(cat, "pt-BR")
+	var loc := GSLocale.new(cat, "pt-BR")
 	_check(loc.t("party.join.deny.full") == "Esta party está cheia.", "the region-less language answers for the region")
 	_check(loc.t("party.join.deny.banned") == "You have been banned from this party.", "and English for what Portuguese lacks")
 	_check(loc.t("party.nope") == "party.nope", "and the key itself when nobody has it")
@@ -152,7 +152,7 @@ func _test_chain() -> void:
 
 	# A Russian player shown the English fallback gets English plural rules: Russian ones
 	# would pick "few" and there is no such branch in an English sentence.
-	var ru := DotLocale.new(cat, "ru")
+	var ru := GSLocale.new(cat, "ru")
 	_check(ru.t("party.rounds", {"count": 22}) == "22 rounds", "a fallback message is pluralised by its own language")
 	_check(ru.t("party.players", {"count": 22}) == "22 игрока", "and a Russian one by Russian's")
 
@@ -168,10 +168,10 @@ func _test_chain() -> void:
 func _test_explain() -> void:
 	_section("A refusal from the website, in the player's language")
 
-	var loc := DotLocale.new(_catalogue(), "de")
-	var err := DotError.make(DotError.CODE_CONFLICT, "This party is full.", "party.join.deny.full")
+	var loc := GSLocale.new(_catalogue(), "de")
+	var err := GSError.make(GSError.CODE_CONFLICT, "This party is full.", "party.join.deny.full")
 	_check(loc.explain(err) == "Diese Party ist voll.", "the site's key is rendered from the catalogue")
-	var unknown := DotError.make(DotError.CODE_CONFLICT, "Something else went wrong.", "not a key at all")
+	var unknown := GSError.make(GSError.CODE_CONFLICT, "Something else went wrong.", "not a key at all")
 	_check(loc.explain(unknown) == "Something else went wrong.", "an error with no known key keeps its own message")
 	_check(loc.explain(null) == "", "and no error explains as nothing")
 
@@ -181,18 +181,18 @@ func _test_explain() -> void:
 func _test_pseudo() -> void:
 	_section("Pseudo-localisation finds what a translator cannot")
 
-	var p := DotLocalePseudo.transform("{user} joined.")
+	var p := GSLocalePseudo.transform("{user} joined.")
 	_check(p.begins_with("[") and p.ends_with("]"), "a message is bracketed, so a clipped end shows")
 	_check(p.contains("{user}"), "an argument name is untouched")
 	_check(p.contains("ĵóíñéð"), "the text is accented")
 	_check(p.length() > "{user} joined.".length() + 2, "and made longer")
 
-	var plural := DotLocalePseudo.transform("{count, plural, one {# round} other {# rounds}}")
-	_check(DotLocaleFormat.compile(plural).ok, "a plural still parses after the transform")
+	var plural := GSLocalePseudo.transform("{count, plural, one {# round} other {# rounds}}")
+	_check(GSLocaleFormat.compile(plural).ok, "a plural still parses after the transform")
 	_check(plural.contains("one {") and plural.contains("other {"), "with its keywords intact")
 
 	var cat := _catalogue()
-	var loc := DotLocale.new(cat, "en")
+	var loc := GSLocale.new(cat, "en")
 	loc.pseudo = true
 	var shown := loc.t("party.rounds", {"count": 3})
 	_check(shown.contains("3") and shown.contains("ŕóúñðš"), "and formats with real arguments")
@@ -208,12 +208,12 @@ func _test_pseudo() -> void:
 func _test_config() -> void:
 	_section("The configuration builds a translator even with nothing to read")
 
-	var c := DotLocaleConfig.new()
+	var c := GSLocaleConfig.new()
 	c.directory = "res://no/such/dir"
 	c.language = "de"
 	var made := c.make()
 	_check(made.ok, "a missing locale directory is not an error")
-	var loc: DotLocale = made.value
+	var loc: GSLocale = made.value
 	_check(loc.t("menu.play") == "menu.play", "and the translator shows keys, which is how the first missing string is found")
 	c.default_language = ""
 	_check(not c.validate().ok, "a configuration with nowhere for the chain to end is refused")
@@ -222,8 +222,8 @@ func _test_config() -> void:
 
 # --- helpers ------------------------------------------------------------------
 
-func _catalogue() -> DotLocaleCatalogue:
-	var cat := DotLocaleCatalogue.new()
+func _catalogue() -> GSLocaleCatalogue:
+	var cat := GSLocaleCatalogue.new()
 	cat.add("en", "party", {
 		"join": {"deny": {"full": "This party is full.", "banned": "You have been banned from this party."}},
 		"rounds": "{count, plural, one {# round} other {# rounds}}",

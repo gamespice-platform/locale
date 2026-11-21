@@ -1,10 +1,10 @@
-class_name DotLocale
+class_name GSLocale
 extends RefCounted
 
 ## Turns a message key into a sentence in the player's language.
 ##
 ## [codeblock]
-## var loc := DotLocale.new(catalogue, "de")
+## var loc := GSLocale.new(catalogue, "de")
 ## label.text = loc.t("party.ready.countdown", {"seconds": 5})
 ## status.text = loc.explain(result.error)   # a refusal, in German, from the site's own key
 ## [/codeblock]
@@ -21,12 +21,12 @@ extends RefCounted
 ## rules; Russian ones would pick "few" and find no such branch.
 ##
 ## [b]A refusal is a key.[/b] website-city refuses with keys — [code]party.join.deny.full[/code]
-## — and GameSpice Party carries them in [member DotError.detail]. [method explain] renders one
+## — and GameSpice Party carries them in [member GSError.detail]. [method explain] renders one
 ## if the catalogue has it and falls back to the error's own English message if not, so a
 ## game gets the site's translation for free where it has the site's files and loses
 ## nothing where it does not.
 ##
-## No autoload. [method register] puts one in [DotRegistry] under [constant SERVICE] for
+## No autoload. [method register] puts one in [GSRegistry] under [constant SERVICE] for
 ## addons that want to find it without naming it.
 
 const CHANNEL := "locale"
@@ -34,10 +34,10 @@ const SERVICE := &"dot_locale"
 
 signal locale_changed(locale: String)
 
-var catalogue: DotLocaleCatalogue = null
+var catalogue: GSLocaleCatalogue = null
 var default_locale: String = "en"
 
-## Show every message pseudo-localised. See [DotLocalePseudo].
+## Show every message pseudo-localised. See [GSLocalePseudo].
 var pseudo: bool = false
 
 var _locale: String = "en"
@@ -46,15 +46,15 @@ var _compiled: Dictionary = {}
 var _missing: Dictionary = {}
 
 
-func _init(p_catalogue: DotLocaleCatalogue = null, p_locale: String = "", p_default: String = "en") -> void:
-	catalogue = p_catalogue if p_catalogue != null else DotLocaleCatalogue.new()
-	default_locale = DotLocaleCatalogue.normalise(p_default)
-	set_locale(p_locale if p_locale != "" else DotLocale.detect())
+func _init(p_catalogue: GSLocaleCatalogue = null, p_locale: String = "", p_default: String = "en") -> void:
+	catalogue = p_catalogue if p_catalogue != null else GSLocaleCatalogue.new()
+	default_locale = GSLocaleCatalogue.normalise(p_default)
+	set_locale(p_locale if p_locale != "" else GSLocale.detect())
 
 
 ## The operating system's language, as a tag. "en" when it will not say.
 static func detect() -> String:
-	var tag := DotLocaleCatalogue.normalise(OS.get_locale())
+	var tag := GSLocaleCatalogue.normalise(OS.get_locale())
 	return tag if tag != "" else "en"
 
 
@@ -63,27 +63,27 @@ func locale() -> String:
 
 
 func set_locale(tag: String) -> void:
-	var next := DotLocaleCatalogue.normalise(tag)
+	var next := GSLocaleCatalogue.normalise(tag)
 	if next == "":
 		next = default_locale
-	_chain = DotLocale.chain_for(next, default_locale)
+	_chain = GSLocale.chain_for(next, default_locale)
 	if next == _locale:
 		return
 	_locale = next
-	DotLog.debug(CHANNEL, "language set", {"locale": next, "chain": ",".join(_chain)})
+	GSLog.debug(CHANNEL, "language set", {"locale": next, "chain": ",".join(_chain)})
 	locale_changed.emit(next)
 
 
 ## "pt-BR" with default "en" → pt-BR, pt, en.
 static func chain_for(tag: String, fallback: String) -> PackedStringArray:
 	var out := PackedStringArray()
-	var t := DotLocaleCatalogue.normalise(tag)
+	var t := GSLocaleCatalogue.normalise(tag)
 	while t != "":
 		if not out.has(t):
 			out.append(t)
 		var dash := t.rfind("-")
 		t = t.substr(0, dash) if dash > 0 else ""
-	var f := DotLocaleCatalogue.normalise(fallback)
+	var f := GSLocaleCatalogue.normalise(fallback)
 	if f != "" and not out.has(f):
 		out.append(f)
 	return out
@@ -110,12 +110,12 @@ func t(key: String, args: Dictionary = {}) -> String:
 		return _render(str(p), args, tag)
 	if not _missing.has(key):
 		_missing[key] = true
-		DotLog.debug(CHANNEL, "no message for a key in any language of the chain", {"key": key, "chain": ",".join(_chain)})
+		GSLog.debug(CHANNEL, "no message for a key in any language of the chain", {"key": key, "chain": ",".join(_chain)})
 	return key
 
 
 ## A refusal in the player's language: its key if the catalogue knows it, its message if not.
-func explain(error: DotError, args: Dictionary = {}) -> String:
+func explain(error: GSError, args: Dictionary = {}) -> String:
 	if error == null:
 		return ""
 	if error.detail != "" and has(error.detail):
@@ -139,16 +139,16 @@ func missing_keys() -> PackedStringArray:
 ## plural handed to it would show its braces.
 func to_translation(tag: String) -> Translation:
 	var translation := Translation.new()
-	translation.locale = DotLocaleCatalogue.normalise(tag).replace("-", "_")
+	translation.locale = GSLocaleCatalogue.normalise(tag).replace("-", "_")
 	for key in catalogue.keys(tag):
 		var p := str(catalogue.pattern(tag, key))
 		if not p.contains("{"):
-			translation.add_message(key, DotLocalePseudo.transform(p) if pseudo else p)
+			translation.add_message(key, GSLocalePseudo.transform(p) if pseudo else p)
 	return translation
 
 
 func register(scope: StringName = &"") -> void:
-	DotRegistry.register(DotRegistry.scoped_name(SERVICE, scope), self)
+	GSRegistry.register(GSRegistry.scoped_name(SERVICE, scope), self)
 
 
 func describe_lines() -> PackedStringArray:
@@ -162,18 +162,18 @@ func describe_lines() -> PackedStringArray:
 
 
 func _render(pattern: String, args: Dictionary, tag: String) -> String:
-	var source := DotLocalePseudo.transform(pattern) if pseudo else pattern
+	var source := GSLocalePseudo.transform(pattern) if pseudo else pattern
 	if not source.contains("{") and not source.contains("'"):
 		return source
 	var nodes: Variant = _compiled.get(source)
 	if nodes == null:
-		var compiled := DotLocaleFormat.compile(source)
+		var compiled := GSLocaleFormat.compile(source)
 		if not compiled.ok:
-			DotLog.warn(CHANNEL, "a message does not parse and is shown raw", {"locale": tag, "detail": compiled.error.message})
+			GSLog.warn(CHANNEL, "a message does not parse and is shown raw", {"locale": tag, "detail": compiled.error.message})
 			_compiled[source] = []
 			return source
 		nodes = compiled.value
 		_compiled[source] = nodes
 	if (nodes as Array).is_empty():
 		return source
-	return DotLocaleFormat.render(nodes as Array, args, tag)
+	return GSLocaleFormat.render(nodes as Array, args, tag)

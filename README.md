@@ -31,9 +31,9 @@ A key is the file name plus the path: `party.join.deny.full`, the same key the w
 ## Use
 
 ```gdscript
-var config := DotLocaleConfig.new()
+var config := GSLocaleConfig.new()
 config.load_layered()                        # so --locale-language and --locale-pseudo apply
-var loc: DotLocale = config.make().value     # reads res://locales
+var loc: GSLocale = config.make().value     # reads res://locales
 
 label.text = loc.t("party.join.deny.full")
 label.text = loc.t("party.ready.count", {"count": 3})
@@ -70,7 +70,7 @@ Pseudo-localisation shows `Sam joined.` as `[Sam ĵóíñéð. ~·~]`. Text stil
 
 ## Settings
 
-`DotLocaleConfig` is layered like every GameSpice config: inspector defaults, a JSON file, the environment, then the command line. Call `load_layered()` before `make()`. Environment names look like `GS_LOCALE_LANGUAGE`, flags like `--locale-language`.
+`GSLocaleConfig` is layered like every GameSpice config: inspector defaults, a JSON file, the environment, then the command line. Call `load_layered()` before `make()`. Environment names look like `GS_LOCALE_LANGUAGE`, flags like `--locale-language`.
 
 | Setting | Default | What it does |
 | --- | --- | --- |
