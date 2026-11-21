@@ -30,7 +30,7 @@ extends RefCounted
 ## addons that want to find it without naming it.
 
 const CHANNEL := "locale"
-const SERVICE := &"dot_locale"
+const SERVICE := &"gs_locale"
 
 signal locale_changed(locale: String)
 

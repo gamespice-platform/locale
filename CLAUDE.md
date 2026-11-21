@@ -1,10 +1,10 @@
 # GameSpice Locale
 
-Localisation that reads website-city's own locale files: ICU MessageFormat, CLDR plural rules, a fallback chain that ends in the key, and pseudo-localisation. It turns the reason keys the site and dot-party return into sentences in the player's language.
+Localisation that reads website-city's own locale files: ICU MessageFormat, CLDR plural rules, a fallback chain that ends in the key, and pseudo-localisation. It turns the reason keys the site and gs-party return into sentences in the player's language.
 
 Read the family [CLAUDE.md](../../CLAUDE.md) first.
 
-**The distributable is `addons/dot_locale/`.** It requires [GameSpice Core](../dot-core) and nothing else (`ln -s ../../dot-core/addons/dot_core addons/dot_core`, gitignored).
+**The distributable is `addons/gs_locale/`.** It requires [GameSpice Core](../gs-core) and nothing else (`ln -s ../../gs-core/addons/gs_core addons/gs_core`, gitignored).
 
 ## Read before
 
@@ -17,15 +17,15 @@ Read the family [CLAUDE.md](../../CLAUDE.md) first.
 
 | Path | What |
 | --- | --- |
-| `core/dot_locale_plural.gd` | `GSLocalePlural`: CLDR cardinal rules with CLDR's operands; unknown language → `other` |
-| `core/dot_locale_format.gd` | `GSLocaleFormat`: the ICU subset, compiled to a tree once |
-| `core/dot_locale_catalogue.gd` | `GSLocaleCatalogue`: locale → key → pattern; `load_dir`, `add(locale, ns, tree)`, `missing_in`, `argument_mismatches` |
-| `core/dot_locale_pseudo.gd` | `GSLocalePseudo`: accent, bracket, expand, keep the ICU structure |
-| `runtime/dot_locale.gd` | `GSLocale`: the translator; `t`, `explain(GSError)`, `chain`, `missing_keys`, `to_translation`, `register` |
-| `dot_locale_config.gd` | `GSLocaleConfig`: `language`, `default_language`, `directory`, `pseudo`, layered (`--locale-language de`, `--locale-pseudo true`) |
+| `core/gs_locale_plural.gd` | `GSLocalePlural`: CLDR cardinal rules with CLDR's operands; unknown language → `other` |
+| `core/gs_locale_format.gd` | `GSLocaleFormat`: the ICU subset, compiled to a tree once |
+| `core/gs_locale_catalogue.gd` | `GSLocaleCatalogue`: locale → key → pattern; `load_dir`, `add(locale, ns, tree)`, `missing_in`, `argument_mismatches` |
+| `core/gs_locale_pseudo.gd` | `GSLocalePseudo`: accent, bracket, expand, keep the ICU structure |
+| `runtime/gs_locale.gd` | `GSLocale`: the translator; `t`, `explain(GSError)`, `chain`, `missing_keys`, `to_translation`, `register` |
+| `gs_locale_config.gd` | `GSLocaleConfig`: `language`, `default_language`, `directory`, `pseudo`, layered (`--locale-language de`, `--locale-pseudo true`) |
 | `examples/locale_selftest.tscn` | the suite; writes nothing outside `user://` |
 
-Paths except `examples/` are in `addons/dot_locale/`.
+Paths except `examples/` are in `addons/gs_locale/`.
 
 ## Running and testing
 

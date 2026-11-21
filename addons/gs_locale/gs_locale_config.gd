@@ -23,7 +23,7 @@ extends GSConfig
 
 
 func env_prefix() -> String:
-	return "DOT_LOCALE_"
+	return "GS_LOCALE_"
 
 
 func cli_prefix() -> String:

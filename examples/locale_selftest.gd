@@ -1,6 +1,6 @@
 extends Node
 
-## Exercises dot-locale with the message shapes website-city's locale files actually contain.
+## Exercises gs-locale with the message shapes website-city's locale files actually contain.
 ##
 ## [b]Section 1 is the one to keep.[/b] Plural rules are where a localisation layer is
 ## quietly wrong: every English check passes against a rule that says "1 is one, the rest
@@ -26,7 +26,7 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	_line("dot-locale self-test")
+	_line("gs-locale self-test")
 	_line("")
 
 	_test_plurals()

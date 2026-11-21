@@ -4,7 +4,7 @@ Why the addon exists and the decisions behind it. The one-line rules are in [CLA
 
 ## Why this exists
 
-Before it, nothing in the family localised anything: no addon or game called `TranslationServer`, and every string on every screen was an English literal. Meanwhile website-city is translated into nine languages (`locales/{de,en,es,fr,ja,nl,pt,ru,zh}/*.json`, about fifty namespaces each, rendered by next-intl) and refuses API requests with **keys** (`party.join.deny.full`) rather than prose. dot-party carries those keys in `GSError.detail`. This addon turns one into a sentence in the player's language without a second table. Its first consumer is dot-server-deploy's client shell.
+Before it, nothing in the family localised anything: no addon or game called `TranslationServer`, and every string on every screen was an English literal. Meanwhile website-city is translated into nine languages (`locales/{de,en,es,fr,ja,nl,pt,ru,zh}/*.json`, about fifty namespaces each, rendered by next-intl) and refuses API requests with **keys** (`party.join.deny.full`) rather than prose. gs-party carries those keys in `GSError.detail`. This addon turns one into a sentence in the player's language without a second table. Its first consumer is gs-server-deploy's client shell.
 
 ## The chain ends in the key
 
