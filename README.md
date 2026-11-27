@@ -2,7 +2,7 @@
 
 Translates a game's text into the player's language. It reads the same files, message format and keys as the TMC website, so when the website refuses something (a full party, say), the game can show the website's own message in any language the website has, with nothing to keep in sync.
 
-Part of the [**GameSpice**](https://gamespice.net) collection: modular, MIT-licensed building blocks for games on the GameSpice platform (only the TMC website back end is closed). It was built with Claude Code and its headless suite passes, but little of it has met real players yet, so expect rough edges and please report what you find.
+gs-locale is a [GameSpice](https://gamespice.net) addon under the MIT licence, built with Claude Code. Run `examples/locale_selftest.tscn` headless to test it. The games in [Zee's Games](https://zeesgames.com) run on live servers on the same addons, so this one is used outside the test scene too.
 
 ## Features
 
@@ -85,6 +85,14 @@ Pseudo-localisation shows `Sam joined.` as `[Sam ĵóíñéð. ~·~]`. Text stil
 godot --headless --path . --import
 godot --headless --path . res://examples/locale_selftest.tscn
 ```
+
+## Used by
+
+The following games carry it in their addons folder:
+
+- [Smash Copter](https://zeesgames.com/smash-copter) - its UI text goes through it (`sc_text.gd`)
+
+The whole collection is at [zeesgames.com](https://zeesgames.com).
 
 ## Licence
 
